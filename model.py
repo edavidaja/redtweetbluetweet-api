@@ -1,15 +1,21 @@
-import pickle
 import json
+import joblib
 import nltk
 import pandas as pd
+import os
+
+from google.cloud import storage
 
 from sklearn.compose import ColumnTransformer
-from sklearn.decomposition import TruncatedSVD
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
-from sklearn.externals import joblib
+
+CLOUD_STORAGE_BUCKET = os.environ.get("CLOUD_STORAGE_BUCKET")
+
+client = storage.Client()
+bucket = client.get_bucket(CLOUD_STORAGE_BUCKET)
 
 tokenizer = nltk.casual.TweetTokenizer(preserve_case=False, reduce_len=True)
 
@@ -36,7 +42,3 @@ grid_search = GridSearchCV(reg, grid_parameters, cv=5, n_jobs=-1, verbose=1)
 grid_search.fit(X_test, y_test)
 
 joblib.dump(grid_search.best_estimator_, "model/model.joblib", compress=1)
-
-with open("model/model.pkl", "wb") as f:
-    pickle.dump(grid_search.best_estimator_, f)
-

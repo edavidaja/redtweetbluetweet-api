@@ -1,18 +1,15 @@
+import os
 from flask import Flask, request, jsonify, abort
-import joblib
-import logging
+from google.cloud import storage
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger("index.py")
+CLOUD_STORAGE_BUCKET = os.environ.get("CLOUD_STORAGE_BUCKET")
+
+client = storage.Client()
+bucket = client.get_bucket(CLOUD_STORAGE_BUCKET)
+
+model_blob = bucket.get_blob("model.joblib")
 app = Flask(__name__)
-logger.debug("before model")
 model = joblib.load("model/model.joblib")
-logger.debug("after model")
-
-
-@app.route("/")
-def index():
-    return "Index Page"
 
 
 @app.route("/predict", methods=["POST"])
