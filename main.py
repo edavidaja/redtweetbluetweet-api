@@ -1,15 +1,31 @@
 import os
+import joblib
 from flask import Flask, request, jsonify, abort
 from google.cloud import storage
 
-CLOUD_STORAGE_BUCKET = os.environ.get("CLOUD_STORAGE_BUCKET")
+bucket_name = os.getenv("BUCKET_NAME")
+PORT = os.getenv("PORT", 8080)
+model_blob = "model.joblib"
+dest_file = "/tmp/model.joblib"
 
-client = storage.Client()
-bucket = client.get_bucket(CLOUD_STORAGE_BUCKET)
 
-model_blob = bucket.get_blob("model.joblib")
-app = Flask(__name__)
+def download_blob(bucket_name, source_blob_name, destination_file_name):
+    """Downloads a blob from the bucket."""
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(bucket_name)
+    blob = bucket.blob(source_blob_name)
+
+    blob.download_to_filename(destination_file_name)
+
+
 model = joblib.load("model/model.joblib")
+
+app = Flask(__name__)
+
+
+@app.route("/")
+def index():
+    return {"status": "it's alive"}
 
 
 @app.route("/predict", methods=["POST"])
@@ -25,4 +41,4 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(host="0.0.0.0", port=PORT)
