@@ -1,6 +1,7 @@
 import os
 import joblib
 from flask import Flask, request, jsonify, abort
+from flask_cors import CORS
 from google.cloud import storage
 
 bucket_name = os.getenv("BUCKET_NAME")
@@ -22,13 +23,13 @@ model = joblib.load("model/model.joblib")
 
 app = Flask(__name__)
 
-
 @app.route("/")
 def index():
     return {"status": "it's alive"}
 
 
 @app.route("/predict", methods=["POST"])
+@cross_origin()
 def predict():
     if not request.json or not "text" in request.json:
         abort(400)
