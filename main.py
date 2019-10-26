@@ -1,7 +1,7 @@
 import os
 import joblib
 from flask import Flask, request, jsonify, abort
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from google.cloud import storage
 
 bucket_name = os.getenv("BUCKET_NAME")
@@ -23,6 +23,7 @@ model = joblib.load("model/model.joblib")
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def index():
     return {"status": "it's alive"}
@@ -42,4 +43,4 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(port=PORT)
+    app.run(debug=True, port=PORT)
