@@ -2,22 +2,8 @@ import os
 import joblib
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS, cross_origin
-from google.cloud import storage
 
-bucket_name = os.getenv("BUCKET_NAME")
 PORT = os.getenv("PORT", 8080)
-model_blob = "model.joblib"
-dest_file = "/tmp/model.joblib"
-
-
-def download_blob(bucket_name, source_blob_name, destination_file_name):
-    """Downloads a blob from the bucket."""
-    storage_client = storage.Client()
-    bucket = storage_client.get_bucket(bucket_name)
-    blob = bucket.blob(source_blob_name)
-
-    blob.download_to_filename(destination_file_name)
-
 
 model = joblib.load("model/model.joblib")
 
@@ -43,4 +29,4 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=PORT)
+    app.run(port=PORT)
