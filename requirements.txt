@@ -2,7 +2,9 @@ cachetools==3.1.1
 certifi==2019.9.11
 chardet==3.0.4
 Click==7.0
+feather-format==0.4.0
 Flask==1.1.1
+Flask-Cors==3.0.8
 google-api-core==1.14.3
 google-auth==1.6.3
 google-cloud-core==1.0.3
@@ -18,6 +20,7 @@ nltk==3.4.5
 numpy==1.17.3
 pandas==0.25.2
 protobuf==3.10.0
+pyarrow==0.15.0
 pyasn1==0.4.7
 pyasn1-modules==0.2.7
 python-dateutil==2.8.0
