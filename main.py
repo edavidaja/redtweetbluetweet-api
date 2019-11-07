@@ -5,7 +5,9 @@ from flask_cors import CORS, cross_origin
 
 PORT = os.getenv("PORT", 8080)
 
-model = joblib.load("model/model.joblib")
+def load_model(path):
+    model = joblib.load(path)
+    return model
 
 app = Flask(__name__)
 
@@ -21,7 +23,7 @@ def predict():
     if not request.json or not "text" in request.json:
         abort(400)
     text = [request.json["text"]]
-
+    model = load_model("model/model.joblib")
     prediction = model.predict_proba(text)
     out = prediction.tolist()
 
