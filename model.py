@@ -4,18 +4,11 @@ import nltk
 import pandas as pd
 import os
 
-from google.cloud import storage
-
 from sklearn.compose import ColumnTransformer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
-
-CLOUD_STORAGE_BUCKET = os.environ.get("CLOUD_STORAGE_BUCKET")
-
-client = storage.Client()
-bucket = client.get_bucket(CLOUD_STORAGE_BUCKET)
 
 tokenizer = nltk.casual.TweetTokenizer(preserve_case=False, reduce_len=True)
 
