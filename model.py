@@ -1,5 +1,5 @@
 import json
-import pickle
+import joblib
 import nltk
 import pandas as pd
 import os
@@ -26,7 +26,7 @@ reg = Pipeline(
 
 X = data["full_text"].values.tolist()
 y = data["party_code"]
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.001)
 
 grid_parameters = {"tfidf__min_df": (0.1, 1)}
 
@@ -34,5 +34,4 @@ grid_search = GridSearchCV(reg, grid_parameters, cv=5, n_jobs=-1, verbose=1)
 
 grid_search.fit(X_test, y_test)
 
-with open("model/model.pkl", "wb") as f:
-    pickle.dump(grid_search.best_estimator_, f)
+joblib.dump(grid_search.best_estimator_, "model/model.joblib")

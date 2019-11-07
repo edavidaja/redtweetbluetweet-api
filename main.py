@@ -1,5 +1,5 @@
 import os
-import pickle
+import joblib
 from flask import Flask, request, jsonify, abort
 from flask_cors import CORS, cross_origin
 
@@ -7,12 +7,11 @@ PORT = os.getenv("PORT", 8080)
 
 
 def load_model(path):
-    with open(path, "rb") as f:
-        model = pickle.load(f)
+    model = joblib.load(path)
     return model
 
 
-model = load_model("model/model.pkl")
+model = load_model("model/model.joblib")
 
 app = Flask(__name__)
 

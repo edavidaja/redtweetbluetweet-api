@@ -1,4 +1,4 @@
 runtime: python37
-instance_class: F4_HIGHMEM
+instance_class: F4_1G
 env_variables:
   BUCKET_NAME: "redtweetbluetweet.appspot.com"
