@@ -1,5 +1,5 @@
 import json
-import joblib
+import pickle
 import nltk
 import pandas as pd
 import os
@@ -28,10 +28,11 @@ X = data["full_text"].values.tolist()
 y = data["party_code"]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
 
-grid_parameters = {"tfidf__stop_words": (None, demonyms), "tfidf__min_df": (0.1, 1)}
+grid_parameters = {"tfidf__min_df": (0.1, 1)}
 
 grid_search = GridSearchCV(reg, grid_parameters, cv=5, n_jobs=-1, verbose=1)
 
 grid_search.fit(X_test, y_test)
 
-joblib.dump(grid_search.best_estimator_, "model/model.joblib", compress=1)
+with open("model/model.pkl", "wb") as f:
+    pickle.dump(grid_search.best_estimator_, f)
